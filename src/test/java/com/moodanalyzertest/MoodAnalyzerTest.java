@@ -95,4 +95,15 @@ public class MoodAnalyzerTest {
             Assert.assertEquals(MoodAnalysisException.enumExceptionType.NO_SUCH_METHOD,e.getMessage());
         }
     }
+
+    @Test
+    public void givenMoodAnalyserClassWithParameterConstructor_WhenProper_ShouldReturnObject() {
+        try {
+            MoodAnalyzer mood = createMoodAnalyzerObject("I am in Happy mood");
+            Assert.assertEquals(new MoodAnalyzer("I am in Happy mood"), mood);
+        }
+        catch(MoodAnalysisException e) {
+            e.printStackTrace();
+        }
+    }
 }

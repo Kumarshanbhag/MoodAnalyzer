@@ -29,4 +29,16 @@ public class MoodAnalyzerFactory {
             throw new MoodAnalysisException(MoodAnalysisException.enumExceptionType.NO_SUCH_CLASS,e.getMessage());
         }
     }
+
+    public static MoodAnalyzer createMoodAnalyzerObject(String message) {
+        try {
+            Class<?> moodAnalyzerClass = Class.forName("com.moodanalyzer.MoodAnalyzer");
+            Constructor<?> moodAnalyzerconstructor = moodAnalyzerClass.getConstructor(String.class);
+            MoodAnalyzer obj=(MoodAnalyzer) moodAnalyzerconstructor.newInstance(message);
+            return obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
