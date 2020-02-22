@@ -121,10 +121,44 @@ public class MoodAnalyzerTest {
     @Test
     public void givenHappyMoodUsingReflection_WhenImproperMethodName_ShouldReturnException() {
         try {
-            String mood = MoodAnalyzerFactory.invokeMethod("I am in Happy Mood", "com.moodanalyzer.MoodAnalyzer","analyzeMood1");
+            MoodAnalyzerFactory.invokeMethod("I am in Happy Mood", "com.moodanalyzer.MoodAnalyzer","analyzeMood1");
         }
         catch (MoodAnalysisException e) {
             Assert.assertEquals(MoodAnalysisException.enumExceptionType.NO_SUCH_METHOD,e.type);
+        }
+    }
+
+    @Test
+    public void givenHappyMoodUsingReflection_WhenProperSetField_ShouldReturnObject() {
+        try {
+            MoodAnalyzer moodAnalyzerObject = createMoodAnalyzerObject();
+            String fieldMood = invokeField(moodAnalyzerObject, "I am in Happy Mood", "mood");
+            Assert.assertEquals("Happy", fieldMood);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenHappyMoodUsingReflection_WhenImproperSetMood_ShouldReturnException() {
+        try {
+            MoodAnalyzer moodAnalyzerObject = createMoodAnalyzerObject();
+            invokeField(moodAnalyzerObject, "I am in Happy Mood", "mood1");
+        }
+        catch(MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.enumExceptionType.NO_SUCH_FIELD,e.type);
+        }
+    }
+
+    @Test
+    public void givenNullMessageUsingReflection_WhenProperSetMood_ShouldReturnException() {
+        try {
+            MoodAnalyzer moodAnalyzerObject = createMoodAnalyzerObject();
+            invokeField(moodAnalyzerObject, null, "mood");
+        }
+        catch(MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.enumExceptionType.OBJECT_INVOCATION_ISSUE,e.type);
         }
     }
 }

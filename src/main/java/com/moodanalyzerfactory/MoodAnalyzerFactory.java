@@ -4,6 +4,7 @@ import com.moodanalyzer.MoodAnalyzer;
 import com.moodanalyzerexception.MoodAnalysisException;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 public class MoodAnalyzerFactory {
@@ -57,6 +58,24 @@ public class MoodAnalyzerFactory {
             throw new MoodAnalysisException(MoodAnalysisException.enumExceptionType.NO_SUCH_METHOD,e.getMessage());
         } catch (InvocationTargetException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String invokeField(MoodAnalyzer obj,String message, String mood) {
+        try {
+            Field moodField = obj.getClass().getDeclaredField(mood);
+            moodField.setAccessible(true);
+            moodField.set(obj,message);
+            return (String) obj.getClass().getMethod("analyzeMood").invoke(obj);
+        } catch (NoSuchFieldException e) {
+            throw new MoodAnalysisException(MoodAnalysisException.enumExceptionType.NO_SUCH_FIELD,e.getMessage());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            throw new MoodAnalysisException(MoodAnalysisException.enumExceptionType.OBJECT_INVOCATION_ISSUE,e.getMessage());
         }
         return null;
     }
