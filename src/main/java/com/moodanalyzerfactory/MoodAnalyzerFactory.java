@@ -41,4 +41,23 @@ public class MoodAnalyzerFactory {
         }
         return null;
     }
+
+    public static String invokeMethod(String message, String className,String methodName) {
+        try {
+            Class<?> moodAnalyzerClass = Class.forName(className);
+            Object obj = moodAnalyzerClass.getConstructor(String.class).newInstance(message);
+            return (String) moodAnalyzerClass.getMethod(methodName).invoke(obj);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            throw new MoodAnalysisException(MoodAnalysisException.enumExceptionType.NO_SUCH_METHOD,e.getMessage());
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -79,20 +79,20 @@ public class MoodAnalyzerTest {
     @Test
     public void givenMoodAnalyzerClass_WhenImproper_ShouldReturnException() {
         try {
-            MoodAnalyzerFactory.getConstuctor("com.moodanalyzer.MoodAnalyzer",String.class);
+            MoodAnalyzerFactory.getConstuctor("com.moodanalyzer.MoodAnalyzer1",String.class);
         }
-        catch(Exception e) {
-            Assert.assertEquals(MoodAnalysisException.enumExceptionType.NO_SUCH_CLASS,e.getMessage());
+        catch(MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.enumExceptionType.NO_SUCH_CLASS,e.type);
         }
     }
 
     @Test
     public void givenMoodAnalyzerClass_WhenProperWithImproperConstructor_ShouldReturnException() {
         try {
-            MoodAnalyzerFactory.getConstuctor("com.moodanalyzer.MoodAnalyzer",String.class);
+            MoodAnalyzerFactory.getConstuctor("com.moodanalyzer.MoodAnalyzer",Integer.class);
         }
-        catch(Exception e) {
-            Assert.assertEquals(MoodAnalysisException.enumExceptionType.NO_SUCH_METHOD,e.getMessage());
+        catch(MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.enumExceptionType.NO_SUCH_METHOD,e.type);
         }
     }
 
@@ -104,6 +104,27 @@ public class MoodAnalyzerTest {
         }
         catch(MoodAnalysisException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenHappyMoodUsingReflection_WhenProper_ShouldReturnObject() {
+        try {
+            String mood = MoodAnalyzerFactory.invokeMethod("I am in Happy Mood", "com.moodanalyzer.MoodAnalyzer","analyzeMood");
+            Assert.assertEquals("Happy", mood);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenHappyMoodUsingReflection_WhenImproperMethodName_ShouldReturnException() {
+        try {
+            String mood = MoodAnalyzerFactory.invokeMethod("I am in Happy Mood", "com.moodanalyzer.MoodAnalyzer","analyzeMood1");
+        }
+        catch (MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.enumExceptionType.NO_SUCH_METHOD,e.type);
         }
     }
 }
